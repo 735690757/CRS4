@@ -36,10 +36,10 @@ public class EmailSendOperate {
             props.put("mail.smtp.host", "smtp.qq.com");
             //端口号，QQ邮箱端口587
             props.put("mail.smtp.port", "587");
-            // 此处填写，写信人的账号
-            props.put("mail.user", "735690757@qq.com");
-            // 此处填写16位STMP口令
-            props.put("mail.password", "sxtcprqxetdibfaf");
+            // 此处填写，写信人的账号 ?自己写
+            props.put("mail.user", "???");
+            // 此处填写16位STMP口令 ?自己写
+            props.put("mail.password", "???");
 
             Authenticator authenticator = new Authenticator() {
 
