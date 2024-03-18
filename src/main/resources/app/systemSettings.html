@@ -1,0 +1,218 @@
+<!--系统设置/信息-->
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>系统设置</title>
+    <link rel="stylesheet" href="element-ui/index.css">
+    <script src="./js/vue.js"></script>
+    <script src="./element-ui/index.js"></script>
+    <script src="./js/axios-0.18.0.js"></script>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .el-table .warning-row {
+        background: oldlace;
+    }
+
+    .el-table .success-row {
+        background: #f0f9eb;
+    }
+
+    .el-table .error-row {
+        background: #f5cdcd
+    }
+
+    .el-row {
+        margin-bottom: 20px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .el-col {
+        border-radius: 4px;
+    }
+
+    .bg-purple-dark {
+        background: #99a9bf;
+    }
+
+    .bg-purple {
+        background: #d3dce6;
+    }
+
+    .bg-purple-light {
+        background: #e5e9f2;
+    }
+
+    .grid-content {
+        border-radius: 4px;
+        min-height: 36px;
+    }
+
+    .row-bg {
+        padding: 10px 0;
+        background-color: #f9fafc;
+    }
+</style>
+<body>
+<div id="app">
+    <el-row>
+        <el-col :span="24">
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item>系统日志</el-breadcrumb-item>
+            </el-breadcrumb>
+
+        </el-col>
+    </el-row>
+    <el-row>
+        <el-col :span="8">
+            <div class="grid-content bg-purple">
+                <el-table
+                        :data="systemStartUpLogTable"
+                        height="600"
+                        border
+                        style="width: 100%"
+                        :row-class-name="tableRowClassName">
+                    <el-table-column align="center" label="系统启动日志">
+                        <el-table-column
+                                align="center"
+                                prop="hostAddress"
+                                label="主机地址"
+                                width="150">
+                        </el-table-column>
+                        <el-table-column
+                                align="center"
+                                prop="hostName"
+                                label="主机名"
+                                width="150">
+                        </el-table-column>
+                        <el-table-column
+                                align="center"
+                                prop="startTime"
+                                label="启动时间">
+                        </el-table-column>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </el-col>
+        <el-col :span="16">
+            <div class="grid-content bg-purple-light">
+                <el-table
+                        :data="SystemMessageLogTable"
+                        height="600"
+                        border
+                        style="width: 100%"
+                        :row-class-name="checkData">
+                    <el-table-column align="center" label="系统管理员消息控制日志">
+                        <el-table-column
+                                align="center"
+                                prop="operator"
+                                label="操作人">
+                        </el-table-column>
+                        <el-table-column
+                                align="center"
+                                prop="permissions"
+                                label="操作人权限等级">
+                        </el-table-column>
+                        <el-table-column
+                                align="center"
+                                prop="messageActivity"
+                                label="消息操作活动类型">
+                        </el-table-column>
+                        <el-table-column
+                                align="center"
+                                prop="operationDate"
+                                label="操作日期">
+                        </el-table-column>
+
+                        <el-table-column
+                                align="center"
+                                prop="successful"
+                                label="操作结果（成功与否）">
+                            <template slot-scope="scope">
+                                <el-tag
+                                        :type="scope.row.successful  ? 'success' :'danger' "
+                                        disable-transitions
+                                        v-if="scope.row.successful">成功
+                                </el-tag>
+                                <el-tag
+                                        :type="scope.row.successful  ? 'success' :'danger'"
+                                        disable-transitions
+                                        v-else>失败
+                                </el-tag>
+                            </template>
+                        </el-table-column>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </el-col>
+    </el-row>
+</div>
+</body>
+
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                loginCheck: false,
+                startUp: {
+                    hostAddress: '',
+                    hostName: '',
+                    startTime: ''
+                },
+                systemStartUpLogTable: [],
+                SystemMessageLogTable: []
+            }
+        },
+        created() {
+            axios.get('/system/SystemStartUpLog')
+                .then(res => {
+                    if (res.data.code === 1) {
+                        this.systemStartUpLogTable = res.data.data;
+                    }
+                })
+            axios.get('/system/SystemMessageLog')
+                .then(res => {
+                    if (res.data.code === 1) {
+                        // console.log(JSON.stringify(res.data.data))
+                        this.SystemMessageLogTable = res.data.data;
+                    }
+                })
+        },
+        methods: {
+            checkData({row, rowIndex}) {
+                if (row.operator === '' || row.operator == null) {
+                    row.operator = "系统未知"
+                }
+                if (row.messageActivity === '' || row.messageActivity == null) {
+                    row.messageActivity = "操作内容未知"
+                }
+            },
+            tableRowClassName({row, rowIndex}) {
+                if (row.hostAddress === 'UNKNOWN' || row.hostAddress === '地址未知') {
+                    row.hostAddress = '地址未知';
+                    return 'warning-row';
+                } else if (row.hostAddress === 'Connection timed out' || row.hostAddress === '连接超时') {
+                    row.hostAddress = '连接超时'
+                    return 'error-row';
+
+                } else {
+                    return 'success-row';
+                }
+                return '';
+            }
+        }
+
+    })
+</script>
+</html>

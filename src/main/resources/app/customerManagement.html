@@ -1,0 +1,394 @@
+<!--顾客管理-->
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>顾客信息可视化</title>
+</head>
+<link rel="stylesheet" href="element-ui/index.css">
+<script src="./js/vue.js"></script>
+<script src="./element-ui/index.js"></script>
+<script src="./js/axios-0.18.0.js"></script>
+<script src="js/echarts.js"></script>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    body {
+        overflow: hidden;
+    }
+
+    .el-row {
+        margin-bottom: 20px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .el-col {
+        border-radius: 4px;
+    }
+
+    .bg-purple-dark {
+        background: #ffffff;
+    }
+
+    .bg-purple {
+        background: #ffffff;
+    }
+
+    .bg-purple-light {
+        background: #ffffff;
+    }
+
+    .grid-content {
+        border-radius: 4px;
+        min-height: 36px;
+    }
+
+    .row-bg {
+        padding: 10px 0;
+        background-color: #ffffff;
+    }
+</style>
+<body>
+<div id="app">
+    <el-row>
+        <el-col :span="24">
+            <div class="grid-content bg-purple-dark">
+                <el-breadcrumb separator="/">
+                    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                    <el-breadcrumb-item>顾客信息可视化</el-breadcrumb-item>
+                </el-breadcrumb>
+            </div>
+        </el-col>
+    </el-row>
+    <el-row>
+        <el-col :span="8">
+            <div class="grid-content bg-purple">
+                <div id="mainBing" style="width: 500px; height: 400px;"></div>
+            </div>
+        </el-col>
+        <el-col :span="8">
+            <div class="grid-content bg-purple-light">
+                <div id="mainBing2" style="width: 500px; height: 400px;"></div>
+            </div>
+        </el-col>
+        <!--        <el-col :span="15"><div class="grid-content bg-purple">-->
+        <!--            <div id="main" style="width: 700px; height: 300px;"></div>-->
+        <!--        </div></el-col>-->
+        <el-col :span="8">
+            <div class="grid-content bg-purple-light">
+                <el-card shadow="hover" style="width: 100%; border-radius: 20px; margin-top: -60px;">
+                    <template>
+                        <div style="background:#87e3fc; border-radius: 10px">
+                            <el-row :gutter="20" style="margin-top: 4px; border-radius: 20px">
+                                <el-col :span="24" style="border-radius: 20px;height: 42px ;">
+                                    <el-card shadow="hover" style="width: 100%; border-radius: 10px; opacity: 0.8">
+                                        <div style=" width: 100%; text-align:center; height: 10px;  display: inline-block; ">
+                                            🎉🎉单笔最大订单产生🎉🎉
+                                        </div>
+                                    </el-card>
+                                </el-col>
+
+                            </el-row>
+                            <el-row :gutter="20">
+                                <el-col :span="12">
+                                    <el-card shadow="hover" style=" opacity: 0.8;  width: 100%;">
+                                        <div style="width: 100%; display: inline-block; ">
+                                            🎉产生者
+                                        </div>
+                                    </el-card>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-card shadow="hover" style=" opacity: 0.8; width: 100%; ">
+                                        <div style="width: 100%; text-align:center; display: inline-block; ">
+                                            {{this.maxOrder.name}}
+                                        </div>
+                                    </el-card>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="20">
+                                <el-col :span="12">
+                                    <el-card shadow="hover" style="opacity: 0.8;width: 100%;">
+                                        <div style="width: 100%; opacity: 0.8; display: inline-block; ">
+                                            🎉产生时间
+                                        </div>
+                                    </el-card>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-card shadow="hover" style="opacity: 0.8; width: 100%;">
+                                        <div style="width: 100%; opacity: 0.8; text-align:center; display: inline-block; ">
+                                            {{this.maxOrder.borrowdate}}
+                                        </div>
+                                    </el-card>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="20">
+                                <el-col :span="12">
+                                    <el-card shadow="hover" style="opacity: 0.8; width: 100%;">
+                                        <div style="opacity: 0.8; width: 100%; display: inline-block; ">
+                                            🎉订单费用
+                                        </div>
+                                    </el-card>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-card shadow="hover" style="opacity: 0.8; width: 100%;">
+                                        <div style="opacity: 0.8; width: 100%; text-align:center; display: inline-block; ">
+                                            {{this.maxOrder.fee}}元
+                                        </div>
+                                    </el-card>
+                                </el-col>
+                            </el-row>
+                        </div>
+                    </template>
+                </el-card>
+            </div>
+        </el-col>
+    </el-row>
+    <el-row>
+        <!--        <el-col :span="8">-->
+        <!--            <div class="grid-content bg-purple" >-->
+        <!--                <div id="mainBing" style="width: 500px; height: 400px;"></div>-->
+        <!--            </div>-->
+        <!--        </el-col>-->
+        <!--        <el-col :span="8">-->
+        <!--            <div class="grid-content bg-purple-light">-->
+        <!--                <div id="mainBing2" style="width: 500px; height: 400px;"></div>-->
+        <!--            </div>-->
+        <!--        </el-col>-->
+        <el-col :span="16" style="margin-top: -100px;">
+            <div class="grid-content bg-purple">
+                <div id="main" style="width: 100%; height: 300px;"></div>
+            </div>
+        </el-col>
+        <el-col :span="8" style="margin-top: -90px;">
+            <div class="grid-content bg-purple-light">
+                <p style="margin-left: 70px; margin-top: -2px;"><b>最长时间未归还TOP3</b></p>
+                <template>
+                    <el-table
+                            :data="tableData"
+                            stripe
+                            style="width: 100%">
+                        <el-table-column
+                                prop="name"
+                                label="租赁者"
+                                width="100">
+                        </el-table-column>
+                        <el-table-column
+                                prop="license"
+                                label="车牌号"
+                                width="110">
+                        </el-table-column>
+                        <el-table-column
+                                prop="borrowdate"
+                                label="租赁时间"
+                                width="120">
+                        </el-table-column>
+                    </el-table>
+                </template>
+            </div>
+        </el-col>
+    </el-row>
+
+    <!--    <input type="text" id="myInput" v-model="inputValue" @input="updateChart" />-->
+</div>
+</body>
+</html>
+
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                tableData: [{
+                    date: '2016-05-02',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }],
+                maxOrder: {
+                    id: '1',
+                    name: 'lkr',
+                    license: 'A9090',
+                    borrowdate: '2023-9-2',
+                    returndate: '2323-3-4',
+                    fee: '56565',
+                    restate: true
+                },
+                inputValue: '',
+                myChart: null,
+                customer: [],
+                sumFee: [],
+                option: {
+                    title: {
+                        text: '顾客现有资产量'
+                    },
+                    tooltip: {},
+                    legend: {
+                        data: []
+                    },
+                    xAxis: {
+                        data: []
+                    },
+                    yAxis: {},
+                    series: [
+                        {
+                            name: '人民币（元）',
+                            type: 'bar',
+                            data: []
+                        }
+                    ]
+                },
+
+                option2: {
+                    title: {
+                        text: '顾客产生订单金钱总量',
+                        subtext: 'CRS1-CRS4',
+                        left: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item'
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left'
+                    },
+                    dataFeeSum: {
+                        value: 1,
+                        name: ''
+                    },
+                    series: [
+                        {
+                            name: '金额（元）',
+                            type: 'pie',
+                            radius: '50%',
+                            data: [],
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                },
+                option3: {
+                    title: {
+                        text: '顾客产生订单总数量',
+                        subtext: 'CRS1-CRS4',
+                        left: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item'
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left'
+                    },
+                    dataFeeSum: {
+                        value: 1,
+                        name: ''
+                    },
+                    series: [
+                        {
+                            name: '订单（单）',
+                            type: 'pie',
+                            radius: '50%',
+                            data: [],
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                },
+            }
+        },
+        mounted() {
+            axios.get('/orders/maxFee')
+                .then(res => {
+                    if (res.data.code === 1) {
+                        this.maxOrder = res.data.data;
+                        // alert(JSON.stringify(this.maxOrder))
+                    }
+                })
+            axios.get('/customers/getCustomerList')
+                .then(res => {
+                    if (res.data.code === 1) {
+                        this.customer = res.data.data;
+                        let array = [];
+                        let money = [];
+                        for (const cus of this.customer) {
+                            array.push(cus.name)
+                            money.push(cus.money)
+                        }
+                        this.option.xAxis.data = array;
+                        this.option.series[0].data = money;
+                        // alert(this.option.series.data)
+                        this.myChart = echarts.init(document.getElementById('main'));
+                        this.myChart.setOption(this.option);
+                    }
+                })
+            axios.get('/orders/getFeeOrders')
+                .then(res => {
+                    if (res.data.code === 1) {
+                        this.sumFee = res.data.data;
+
+                        for (const sum of this.sumFee) {
+                            this.option2.series[0].data.push({value: sum.fee, name: sum.name})
+                        }
+                        // alert(JSON.stringify(this.option2.series[0].data))
+                        //mainBing
+
+                        this.myChart = echarts.init(document.getElementById('mainBing'));
+                        this.myChart.setOption(this.option2);
+                    }
+                })
+            axios.get('/orders/getFeeOrdersNum')
+                .then(res => {
+                    if (res.data.code === 1) {
+                        // this.sumFeeNum=res.data.data;
+                        this.option3.series[0].data = res.data.data;
+                        // alert(JSON.stringify(res.data.data))
+                        //mainBing
+
+                        this.myChart = echarts.init(document.getElementById('mainBing2'));
+                        this.myChart.setOption(this.option3);
+                    }
+                })
+            axios.get('/orders/longTimeNotReturned')
+                .then(res => {
+                    if (res.data.code === 1) {
+                        // this.sumFeeNum=res.data.data;
+                        this.tableData = res.data.data;
+
+                    }
+                })
+
+
+        },
+        watch: {
+            // inputValue: {
+            //     handler: function (newValue) {
+            //         // 将输入框的值同步到柱形图的数据中
+            //         this.option.series[0].data[0] = parseInt(newValue) || 0;
+            //         this.option.series[0].data[1] = parseInt(newValue) || 0;
+            //         this.myChart.setOption(this.option);
+            //     },
+            //     deep: true
+            // }
+        },
+        methods: {
+            updateChart() {
+                // 处理输入框值变化
+                // alert(JSON.stringify(this.option.title))
+            }
+        }
+    });
+</script>

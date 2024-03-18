@@ -1,0 +1,316 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+}
+#app{
+    display: flex; /* 将body设置为flex容器 */
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    height: 100vh; /* 设置body的高度为视口高度 */
+}
+
+.body{
+    display: flex; /* 将body设置为flex容器 */
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    height: 100vh; /* 设置body的高度为视口高度 */
+    background: rgb(184, 250, 158);
+    background: linear-gradient(to right,
+    rgb(116, 255, 213) 0,
+    rgb(49, 167, 221) 50%,
+    rgb(164, 166, 255) 100%);
+    background-image: url(../img/5.jpg);
+    background-size: cover;
+
+}
+.for_img{
+    overflow: hidden; /* 用于裁剪内容以适应圆角 */
+    border: none;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    position: absolute;
+    width: 1000px;
+    height: 450px;
+    margin-left: -400px;
+    border-radius: 40px;
+    background-image: url(../img/1.png);
+    transition: all 0.7s;
+    background-size: cover; /* 或者设置为contain */
+}
+.for_img:hover{
+    transition: all 0.7s;
+    width: 1010px;
+    
+    display: flex; /* 将body设置为flex容器 */
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    height: 80%; /* 设置body的高度为视口高度 */
+}
+.for_form{
+    width: 450px;
+    height: 600px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    position: absolute;
+    margin-left: 950px;
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    transition: all 0.7s;
+    position: fixed;
+    z-index: 9999;
+    display: flex; /* 将body设置为flex容器 */
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+
+}
+.for_form:hover{
+    transition: all 0.7s;
+    display: flex; /* 将body设置为flex容器 */
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    height: 540px; /* 设置body的高度为视口高度 */
+    /* background-color: rgba(209, 255, 189, 0.2); */
+}
+.for_head{
+    /* position: fixed; */
+    top: 0;
+    left: auto;
+    margin: auto;
+    text-align: center;
+    width: 100vw;
+    height: 40px;
+    backdrop-filter: blur(5px);
+    position: relative;
+    background-color: rgb(255, 146, 146,0.6);
+    color: #fff;
+    z-index: 999;
+    position: absolute;
+    transition: all 0.7s;
+    background-image: url(../img/5.jpg);
+    background-size: cover; /* 或者设置为contain */
+
+    opacity: 0.5;
+
+}
+.for_foot{
+    transition: all 0.7s;
+
+    position: fixed;
+    bottom: 0;
+    left: auto;
+    margin: auto;
+    width: 100vw;
+    height: 30px;
+    background-color: rgb(255, 146, 146,0.6);
+    color: #fff;
+    z-index: 999;
+    position: absolute;
+    background-size: cover; /* 或者设置为contain */
+
+    background-image: url(../img/5.jpg);
+    opacity: 0.5;
+}
+.for_foot:hover{
+    transition: all 0.7s;
+    opacity: 0.9;
+    background-color: rgb(255, 146, 146,1);
+
+}
+.for_head:hover{
+    transition: all 0.7s;
+    opacity: 0.9;
+    background-color: rgb(255, 146, 146,1);
+
+}
+.footl{
+    height: 100%;
+    width: 260px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-size: 10px;
+    font-style:italic;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.headm{
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    align-items: center;
+    text-align: center;
+    font-size: 50px;
+
+    color: #c7e4ff;
+    transition: all 1.7s;
+
+
+    font-family:  Calibri, 'Trebuchet MS', sans-serif
+}
+.headm:hover span{
+    color: #0cffd4;
+    transition: all 1.7s;
+    /*font-style:italic;*/
+}
+.text1{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-align: center;
+    font-size: 20px;
+    float: left;
+    margin-left: 20px;
+}
+.text{
+    color: #36613e;
+    font-size: 40px;
+    margin-left: 60px;
+    transition: all 0.7s;
+    
+    font-family:'Courier New', Courier, monospace;
+}
+.zhin{
+    width: 320px;
+    height: 45px;
+    margin-top: 10px;
+    /*float: inline-start;*/
+    border-radius: 10px;
+    text-align: center;
+    border: none;
+    outline: none;
+    transition: all 0.7s;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+}
+.label1:hover .for_form{
+    backdrop-filter: blur(25px);
+}
+.dl{
+    /*position: re;*/
+    float: left;
+    width: 140px;
+    height: 50px;
+    background-color: rgb(161, 126, 214);
+    border-radius: 10px;
+    border: 0px;
+    cursor: pointer;
+    margin-top: 50px;
+    margin-left: 160px;
+    transition: all 0.7s;
+
+}
+.dl:hover{
+    transition: all 0.7s;
+    box-shadow: 
+    0px 0px 0px rgb(233,233,233),
+    0px 0px 15px rgb(140, 152, 233),
+    0px 0px 15px rgb(127, 132, 216),
+    0px 0px 0px rgb(233,233,233);
+}
+.dl:hover{
+    transition: all 0.7s;
+    box-shadow:
+            0px 0px 0px rgb(233,233,233),
+            0px 0px 15px rgb(140, 152, 233),
+            0px 0px 15px rgb(127, 132, 216),
+            0px 0px 0px rgb(233,233,233);
+}
+.mima {
+    margin-bottom: 50px;
+}
+.zhin {
+    margin-bottom: 40px;
+}
+.lo{
+    font-size: 80px;
+    margin-left: 120px;
+    margin-bottom: 20px;
+    color: #36613e;
+    transition: all 0.7s;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
+.lo:hover{
+    transition: all 0.7s;
+    color: #4f925b;
+    font-size: 85px;
+}
+.label1{
+    transition: all 0.7s;
+    margin-left: -32px;
+
+}
+.label1:hover{
+    transition: all 0.7s;
+    color: #4f925b;
+    margin-left: 0px;
+
+    font-size: 45px;
+}
+.mima{
+    transition: all 0.7s;
+    margin-left: -32px;
+
+    font-size: 40px;
+}
+.mima:hover{
+    transition: all 0.7s;
+    color: #4f925b;
+    margin-left: 0px;
+
+    font-size: 45px;
+}
+@media screen and (max-width: 1000px) {
+    .headm span{
+        transition: all 0.7s;
+        text-align: center;
+        font-size: 30px;
+    }
+    .for_form{
+        width: 450px;
+        height: 600px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        position: absolute;
+        margin-left: 0px;
+        border-radius: 20px;
+        backdrop-filter: blur(15px);
+        transition: all 0.7s;
+        position: fixed;
+        z-index: 9999;
+        display: flex; /* 将body设置为flex容器 */
+        align-items: center; /* 垂直居中 */
+        justify-content: center; /* 水平居中 */
+    
+    }
+}
+@media screen and (max-width: 750px) {
+    .headm span{
+        transition: all 0.7s;
+
+        font-size: 20px;
+    }
+}
+@media screen and (max-width: 450px) {
+    .headm span{
+        transition: all 0.7s;
+        font-size: 10px;
+    }
+    .for_head{
+        height: 25px;
+    }
+    .for_form{
+        width: 400px;
+    }
+}
+.tzzc{
+    font-size: 20px;
+    color: #0000ff;
+    float: right;
+    margin-top: 10px;
+}
+.dl2{
+    margin-left: 11px;
+    margin-top: -90px;
+}
+.zczc{
+    margin-left:280px;
+    text-decoration: none; /* 去掉下划线 */
+    color: #61ffcf; /* 设置链接颜色，这里使用红色作为示例颜色 */
+}

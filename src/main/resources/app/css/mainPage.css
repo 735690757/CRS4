@@ -1,0 +1,163 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+}
+
+.el-header, .el-footer {
+    background-color: rgb(169, 183, 217);
+    color: #333;
+    text-align: center;
+    line-height: 60px;
+
+}
+
+.el-aside {
+    background-color: #1a2327;
+    color: #ffffff;
+    text-align: center;
+    line-height: 100%
+
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body .el-main {
+    overflow: hidden;
+}
+
+
+.el-main {
+    min-height: 100vh;
+}
+
+#app {
+    height: 100%;
+}
+
+.el-main {
+    background-color: #ffffff;
+    color: #333;
+    text-align: center;
+    line-height: 100%;
+}
+
+body > .el-container {
+    margin-bottom: 40px;
+}
+
+.el-container:nth-child(5) .el-aside,
+.el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+}
+
+.el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+}
+
+.el-row {
+    margin-bottom: 20px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.el-col {
+    border-radius: 0px;
+}
+
+.bg-purple-dark {
+    background: #99a9bf;
+}
+
+.bg-purple {
+    /*background: #d3dce6;*/
+}
+
+.bg-purple-light {
+    /*background: #e5e9f2;*/
+}
+
+.grid-content {
+    border-radius: 0px;
+    min-height: 60px;
+}
+
+.row-bg {
+    padding: 10px 0;
+    background-color: #f9fafc;
+}
+
+.Welcome {
+    margin-left: 30px;
+}
+
+.htb {
+    font-size: 25px;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+}
+
+/*.head-mid{*/
+/*    background-image: url(../img/4.jpg);*/
+/*    background-size: cover;*/
+/*}*/
+/*.head-l{*/
+/*    background-image: url(../img/4.jpg);*/
+/*}*/
+/*.head-r{*/
+/*    background-image: url(../img/4.jpg);*/
+
+/*}*/
+.head-main {
+    /*background-image: url(../img/4.jpg);*/
+    /*background-image: linear-gradient(to  left, #fbc2eb 0%, #a6c1ee 100%);*/
+    background-size: cover;
+
+    background: linear-gradient(to right, #fbc2eb, #b3f6dc, #a6c1ee);
+    background-size: 200% 100%;
+    animation: fluidBackground 5s infinite ease-in-out;
+}
+
+@keyframes fluidBackground {
+    0% {
+        background-position: 0% 50%;
+    }
+    25% {
+        background-position: 50% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    75% {
+        background-position: 50% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.foot-main {
+    /*background-image: url(../img/4.jpg);*/
+    background-size: cover;
+    background-position: 0 60px;
+}
+
+.c_iframe {
+
+    width: 100%;
+    height: 100%;
+    border: 0;
+    overflow: hidden;
+}
+
+.logoimg {
+    margin-top: 5px;
+    margin-right: 100px;
+}
+

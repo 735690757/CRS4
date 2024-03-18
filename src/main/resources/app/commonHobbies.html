@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>联想共同喜好</title>
+    <link rel="stylesheet" href="element-ui/index.css">
+    <script src="./js/vue.js"></script>
+    <script src="./element-ui/index.js"></script>
+    <script src="./js/axios-0.18.0.js"></script>
+    <script src="js/echarts.js"></script>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+</style>
+<body>
+<div id="app">
+    <el-row>
+        <el-col :span="24">
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item>爱好联想</el-breadcrumb-item>
+            </el-breadcrumb>
+        </el-col>
+    </el-row>
+
+    <el-row style="margin-top:20px ">
+        <el-col :span="8">
+            <div class="grid-content bg-purple">
+                <span>喜好关联？MapReduce会告诉你答案！</span>
+            </div>
+        </el-col>
+        <el-col :span="8">
+            <div class="grid-content bg-purple-light">
+                最后执行时间：
+                <el-tag>{{changeTime}}</el-tag>
+
+            </div>
+        </el-col>
+        <el-col :span="8">
+            <div class="grid-content bg-purple">
+                <el-button style="margin-left: 200px" type="primary" :loading=this.buttSta @click="mapReduceOn()" round>
+                    开始计算
+                </el-button>
+            </div>
+        </el-col>
+    </el-row>
+    <el-table
+            :data="tableData"
+            border
+            style="width: 100%;
+            margin-top:20px ">
+        <el-table-column align="center" label="系统联想结果">
+            <el-table-column
+                    prop="customerA"
+                    label="顾客A"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="customerB"
+                    label="顾客B"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="vehicle"
+                    label="共同喜欢的车辆"
+                    align="center">
+            </el-table-column>
+        </el-table-column>
+    </el-table>
+
+</div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                buttSta: false,
+                changeTime: '2020-2-21 12:12:12',
+                tableData: []
+            }
+        },
+        created() {
+            axios.get('/mr/getMRAns')
+                .then(res => {
+                    if (res.data.code === 1) {
+                        this.tableData = res.data.data;
+                    }
+                })
+            axios.get('/mr/getMRTime')
+                .then(res => {
+                    if (res.data.code === 1) {
+                        this.changeTime = res.data.data;
+                    }
+                })
+        },
+        mounted() {
+        },
+        watch: {},
+        methods: {
+            mapReduceOn() {
+                this.buttSta = true
+                this.loadingData();
+                axios.get('/mr/startMR')
+                    .then(res => {
+                        if (res.data.code === 1) {
+                            this.buttSta = false
+                            location.reload();
+                        } else {
+                            console.log('MR失败')
+
+                        }
+                    })
+            },
+            loadingData() {
+                this.$notify({
+                    title: '请耐心等待',
+                    message: '正在执行MapReduce',
+                    position: 'top-left',
+                    duration: 0
+                });
+            }
+        }
+    });
+</script>
+</html>

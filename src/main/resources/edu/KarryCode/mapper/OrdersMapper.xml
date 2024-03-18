@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.KarryCode.mapper.OrdersMapper">
+
+    <select id="getMaxFeeOrders" resultType="edu.KarryCode.domain.po.Orders">
+        select id, name, license, borrowdate, returndate, max(fee) fee, restate
+        from orders;
+
+    </select>
+    <select id="getFeeOrdersGroupByName" resultType="edu.KarryCode.domain.po.Orders">
+        select name, sum(fee) fee
+        from orders
+        group by name;
+    </select>
+    <select id="getOrderNumGroupName" resultType="edu.KarryCode.domain.vo.StringIntVO">
+        select name, count(*) value
+        from orders
+        group by name;
+    </select>
+    <select id="selectCustomerVehicle" resultType="edu.KarryCode.domain.vo.CustomerVehicleVO">
+        select name customerName,Vehicle_name vehicleName
+        from (select name,Vehicle_name
+              from orders , vehicle where orders.license=vehicle.Vehicle_license) xx
+        group by name, Vehicle_name
+    </select>
+
+</mapper>

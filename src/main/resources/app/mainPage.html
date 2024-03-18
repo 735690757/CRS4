@@ -1,0 +1,319 @@
+<!--系统核心界面-->
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <!--    &lt;!&ndash; import CSS &ndash;&gt;-->
+    <!--    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+    <link rel="stylesheet" href="./css/mainPage.css">
+    <meta charset="UTF-8">
+    <title>汽车租赁系统4</title>
+</head>
+<link rel="stylesheet" href="element-ui/index.css">
+<script src="./js/vue.js"></script>
+<script src="./element-ui/index.js"></script>
+<script src="./js/axios-0.18.0.js"></script>
+<link rel="shortcut icon" href="/rui.ico"/>
+<body>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .version {
+        width: 100px;
+        height: 40px;
+        background-image: linear-gradient(to top, #4481eb 0%, #04befe 100%);
+        position: absolute;
+        margin-top: 10px;
+        margin-left: 710px;
+        border-radius: 20px;
+        cursor: pointer;
+
+    }
+
+    .version span {
+        font-size: 24px;
+        position: absolute;
+        margin-left: -29px;
+        margin-top: -10px;
+        font-family: sans-serif;
+        color: whitesmoke;
+        cursor: pointer;
+    }
+
+    .titleCRS {
+        position: absolute;
+        margin-left: 280px;
+    }
+</style>
+<div id="app">
+    <el-container>
+        <el-header class="head-main">
+            <el-row>
+                <el-col :span="4">
+                    <div class="grid-content bg-purple head-l">
+                        <a href="mainPage.html">
+                            <img src="./img/logo.png" class="logoimg" alt="">
+                        </a>
+                    </div>
+                </el-col>
+                <el-col :span="16">
+                    <div class="grid-content bg-purple-light head-mid">
+                        <div class="titleCRS">
+                            <span class="htb">
+                                <b>欢迎使用汽车租赁系统——后台管理</b>
+                            </span>
+                        </div>
+
+                        <div class="version" @click="helloCRS()">
+                            <span>V 4.0</span>
+                        </div>
+                    </div>
+
+                </el-col>
+                <el-col :span="4">
+                    <div class="grid-content bg-purple head-r">
+                        <span>欢迎:{{admin.nickname}}</span>
+                        <span class="Welcome"> </span>
+                        <el-button type="danger" icon="el-icon-switch-button" circle @click="logout"></el-button>
+                    </div>
+                </el-col>
+            </el-row>
+        </el-header>
+        <el-container>
+            <el-aside width="200px">
+                <el-menu
+                        default-active="1"
+                        class="el-menu-vertical-demo"
+                        @open="handleOpen"
+                        @close="handleClose"
+                        background-color="#1a2327"
+                        text-color="#fff"
+                        active-text-color="#66ccff">
+                    <el-menu-item index="1" @click="this.vehicleManage">
+                        <i class="el-icon-truck"></i>
+                        <span slot="title">车辆管理</span>
+                    </el-menu-item>
+                    <!--                                        <el-submenu index="2">-->
+                    <!--                                            <template slot="title">-->
+                    <!--                                                <i class="el-icon-user"></i>-->
+                    <!--                                                <span>人员管理</span>-->
+                    <!--                                            </template>-->
+                    <el-menu-item index="2" @click="this.customerManage"><i class="el-icon-user"></i>顾客信息
+                    </el-menu-item>
+                    <!--                                                <el-menu-item index="1-2" @click="this.employeeMange">员工管理</el-menu-item>-->
+
+                    <!--                                        </el-submenu>-->
+                    <el-menu-item index="3" @click="this.systemSettings">
+                        <i class="el-icon-setting"></i>
+                        <span slot="title">系统日志</span>
+                    </el-menu-item>
+                    <el-menu-item index="4" @click="this.aboutYourself">
+                        <i class="el-icon-user-solid"></i>
+                        <span slot="title">关于自己</span>
+                    </el-menu-item>
+                    <el-submenu index="5">
+                        <template slot="title">
+                            <i class="el-icon-suitcase"></i>
+                            <span>小工具箱</span>
+                        </template>
+                        <el-menu-item index="5-1" @click="this.vehicleRank">
+                            | <i class="el-icon-data-analysis"></i>车辆排行
+                        </el-menu-item>
+                        <el-menu-item index="5-2" @click="this.commonHobbies">
+                            | <i class="el-icon-magic-stick"></i>共同爱好
+                        </el-menu-item>
+
+                    </el-submenu>
+                    <el-menu-item index="6" @click="this.aboutSystem">
+                        <i class="el-icon-s-promotion"></i>
+                        <span slot="title">关于系统</span>
+                    </el-menu-item>
+                </el-menu>
+
+                <el-card shadow="hover"
+                         style=" background-color:rgb(26, 35, 39); border: none; color: white; width: 100%;">
+                    <div style="border: solid white 1px;border-bottom: none;border-left: none;border-right: none; padding-top: 20px; margin-top: 20px;">
+                        <span>每日一言</span>
+                    </div>
+                    <div style="font-size: 17px;  text-align: center; margin-top: 35px; border: none">
+                        <span style=" line-height: 1.5;">{{this.adyWords}}</span>
+                    </div>
+                    </br>
+                    <!--                    <div style="font-size: 17px;text-align: center;">给岁月以文明</div>-->
+
+                    <!--                    <div style="margin-top: 35px;">——《黑暗森林》</div>-->
+                </el-card>
+            </el-aside>
+
+            <el-container>
+                <el-main>
+                    <iframe id="cIframe"
+                            class="c_iframe"
+                            name="cIframe"
+                            :src="iframeUrl"
+                            width="90%"
+                            height="auto"
+                            frameborder="0"
+                    ></iframe>
+                </el-main>
+            </el-container>
+        </el-container>
+    </el-container>
+</div>
+</body>
+<!--&lt;!&ndash; import Vue before Element &ndash;&gt;-->
+<!--<script src="https://unpkg.com/vue@2/dist/vue.js"></script>-->
+<!--&lt;!&ndash; import JavaScript &ndash;&gt;-->
+<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+<script>
+    // let elementById = document.getElementById("cIframe");
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                caidanCount: 0,
+                loginCheck: false,
+                adyWords: '鸭，加载失败咯',
+                admin: {
+                    nickname: '？不欢迎！'
+                },
+                iframeUrl: './vehicleManagement.html',
+                tokenD: {
+                    token: ''
+                },
+            }
+        },
+        created() {
+            let tokenEx = window.localStorage.getItem('token');
+            if (tokenEx) {
+                this.tokenD = JSON.parse(tokenEx);
+            } else {
+                // window.top.location.href = '/CRS/index.html';!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                return;
+            }
+            console.log(this.tokenD.token);
+            axios.post('/loginCheck', this.tokenD.token)
+                .then(res => {
+                    if (res.data.code === 1) {
+
+                    } else {
+                        // alert(res.data.msg)
+                        localStorage.removeItem('token');
+                        window.top.location.href = '/CRS/index.html';
+
+                    }
+                })
+            const admin = window.localStorage.getItem('admin')
+            if (admin) {
+                this.admin = JSON.parse(admin);
+            }
+            this.closeLoading()
+            if (admin == null) {
+                this.loginCheck = false
+                this.adyWords = "不登录不想和你说话！";
+                // window.top.location.href = '/CRS/index.html';
+                return;
+            } else {
+                this.loginCheck = true;
+            }
+            // if (!this.loginCheck){
+            //     // this.messageResx("");
+            //     return;
+            // }
+            axios.get('/daily')
+                .then(res => {
+                    if (res.data.code === 1) {
+                        this.adyWords = res.data.data.data;
+                    }
+                })
+        },
+        methods: {
+            aboutSystem() {
+                this.iframeUrl = './aboutSystem.html'
+            },
+            aboutYourself() {
+                this.iframeUrl = './yourselfManagement.html'
+            },
+            systemSettings() {
+                this.iframeUrl = './systemSettings.html'
+            },
+            customerManage() {
+                this.iframeUrl = './customerManagement.html'
+            },
+            vehicleRank() {
+                this.iframeUrl = './vehicleRank.html'
+            },
+            vehicleManage() {
+                this.iframeUrl = './vehicleManagement.html'
+            },
+            commonHobbies() {
+                this.iframeUrl = './commonHobbies.html'
+            },
+
+            handleOpen(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            handleClose(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            closeLoading() {
+                this.timer = null
+                this.timer = setTimeout(() => {
+                    this.loading = false
+                }, 1000)
+            },
+            logout() {
+                axios.post('/admin/logout', this.admin)
+                    .then(res => {
+                        if (res.data.code === 1) {
+                            alert('退出');
+                            localStorage.removeItem('admin')
+                            localStorage.removeItem('token')
+                            window.location.href = '/CRS/index.html'
+                        }
+                    })
+            },
+            helloCRS() {
+                this.caidan()
+                this.iframeUrl = './aboutSystem.html'
+
+            },
+            caidan() {
+                this.caidanCount++;
+                if (this.caidanCount > 30) {
+                    this.nule()
+
+                } else if (this.caidanCount >= 20) {
+                    this.$message('老铁别点了');
+                } else if (this.caidanCount >= 10) {
+                    this.$message({
+                        message: '累了老铁',
+                        type: 'warning'
+                    });
+                } else {
+                    this.$message({
+                        message: '哈哈哈哈哈，恭喜你发现了小彩蛋！',
+                        type: 'success'
+                    });
+                }
+
+            },
+            nule() {
+                this.$alert('爷不伺候了', '怒了', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                        window.location.href="https://pranx.com/blue-death/"
+                    }
+                });
+            }
+        }
+
+    })
+</script>
+</html>
+
+
+

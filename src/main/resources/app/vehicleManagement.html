@@ -1,0 +1,520 @@
+<!--车辆管理-->
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>车辆管理</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    .el-table .warning-row {
+        background: oldlace;
+    }
+
+    .el-table .success-row {
+        background: #f0f9eb;
+    }
+</style>
+<link rel="stylesheet" href="element-ui/index.css">
+<script src="./js/vue.js"></script>
+<script src="./element-ui/index.js"></script>
+<script src="./js/axios-0.18.0.js"></script>
+<link rel="shortcut icon" href="#"/>
+<body>
+<div id="app">
+    <el-row>
+        <el-col :span="10">
+            <div class="grid-content bg-purple">
+                <el-breadcrumb separator="/">
+                    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                    <el-breadcrumb-item>车辆管理</el-breadcrumb-item>
+                </el-breadcrumb>
+            </div>
+        </el-col>
+        <el-col :span="2">
+            <div style="display: flex; justify-content: right; margin-top: 8px; align-items: center; height: 100%;">
+                <span style="">随便搜索：</span>
+            </div>
+        </el-col>
+
+        <el-col :span="5">
+            <el-input v-model="input" placeholder="模糊查询提供结果可能不完整"></el-input>
+        </el-col>
+
+        <el-col :span="3">
+            <div style="display: flex; margin-left: 20px; height: 100%;">
+                <el-button type="primary" @click="search" icon="el-icon-search">搜索</el-button>
+            </div>
+
+        </el-col>
+        <el-col :span="4">
+
+            <div class="grid-content bg-purple-light">
+                <el-button type="success" @click="openFromAdd" plain icon="el-icon-plus">添加车辆</el-button>
+            </div>
+        </el-col>
+    </el-row>
+    <template>
+        <el-dialog title="添加车辆" :visible.sync="dialogFormVisible2">
+            <el-form :rules="rules" ref="rules" :model="formAdd">
+                <el-form-item label="车辆编号" :label-width="formLabelWidth">
+                    <el-input :disabled="true" v-model="formAdd.id" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item prop="vehicleLicense" label="车牌号" :label-width="formLabelWidth" required>
+                    <el-input v-model="formAdd.vehicleLicense" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item prop="vehicleName" label="车辆名" :label-width="formLabelWidth">
+                    <el-input v-model="formAdd.vehicleName" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item prop="vehicleRent" label="车辆租金" :label-width="formLabelWidth">
+                    <el-input v-model="formAdd.vehicleRent" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="占用状态" :label-width="formLabelWidth">
+                    <el-switch
+                            style="display: block"
+                            v-model="formAdd.vehicleState"
+                            active-color="#ff4949"
+                            inactive-color="#13ce66"
+                            active-text="占用"
+                            inactive-text="空闲">
+                    </el-switch>
+                </el-form-item>
+            </el-form>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible2 = false">取 消</el-button>
+                <el-button type="primary" @click="subVAdd('rules')">确 定</el-button>
+            </div>
+        </el-dialog>
+    </template>
+    <template>
+        <el-table
+                :data="tableData"
+                style="width: 100%"
+                stripe>
+            <el-table-column
+                    prop="vehicleLicense"
+                    label="车牌号">
+            </el-table-column>
+            <el-table-column
+                    prop="vehicleName"
+                    label="车辆名">
+            </el-table-column>
+            <el-table-column
+                    prop="vehicleRent"
+                    label="车辆租金">
+            </el-table-column>
+            <el-table-column
+                    prop="vehicleState"
+                    label="占用状态"
+                    :filters="[{ text: '占用', value: true }, { text: '空闲', value: false }]"
+                    :filter-method="this.filterTag"
+                    filter-placement="bottom-end"
+            >
+                <template slot-scope="scope">
+                    <el-tag
+                            :type="scope.row.vehicleState  ? 'danger' : 'success'"
+                            disable-transitions
+                            v-if="scope.row.vehicleState">占用
+                    </el-tag>
+                    <el-tag
+                            :type="scope.row.vehicleState  ? 'danger' : 'success'"
+                            disable-transitions
+                            v-else>空闲
+                    </el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    label="编 辑">
+                <template slot-scope="scope">
+                    <!--                    <el-button type="text" >打开嵌套表单的 Dialog</el-button>-->
+                    <el-button type="primary" @click="openFrom(scope.row)" plain>修改信息</el-button>
+                    <el-dialog title="修改车辆信息" :visible.sync="dialogFormVisible">
+                        <el-form :rules="rules" ref="rules" :model="form">
+                            <el-form-item label="车辆编号" :label-width="formLabelWidth">
+                                <el-input :disabled="true" v-model="form.id" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item prop="vehicleLicense" label="车牌号" :label-width="formLabelWidth" required>
+                                <el-input v-model="form.vehicleLicense" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item prop="vehicleName" label="车辆名" :label-width="formLabelWidth">
+                                <el-input v-model="form.vehicleName" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item prop="vehicleRent" label="车辆租金" :label-width="formLabelWidth">
+                                <el-input v-model="form.vehicleRent" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="占用状态" :label-width="formLabelWidth">
+                                <el-switch
+                                        style="display: block"
+                                        v-model="form.vehicleState"
+                                        active-color="#ff4949"
+                                        inactive-color="#13ce66"
+                                        active-text="占用"
+                                        inactive-text="空闲">
+                                </el-switch>
+                            </el-form-item>
+                        </el-form>
+
+                        <div slot="footer" class="dialog-footer">
+                            <el-button @click="dialogFormVisible = false">取 消</el-button>
+                            <el-button type="primary" @click="subV('rules')">确 定</el-button>
+                        </div>
+                    </el-dialog>
+                    <el-button type="danger" slot="reference" @click="deleteV(scope.row)" plain>删除车辆</el-button>
+
+                    <el-dialog
+                            title="请注意"
+                            :visible.sync="dialogVisible3"
+                            width="30%">
+                        <span>您正在执行删除操作，确认吗？</span>
+                        <span slot="footer" class="dialog-footer">
+                                <el-button @click="dialogVisible3 = false">取 消</el-button>
+                                <el-button type="primary" @click="okDelete">确 定</el-button>
+                            </span>
+                    </el-dialog>
+                </template>
+            </el-table-column>
+        </el-table>
+    </template>
+    <template>
+        <div class="block">
+            <el-pagination
+                    @size-change="this.handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[ 8, 9, 10]"
+                    :page-size="5"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="allPage">
+            </el-pagination>
+            <!--            当前：{{this.currentPage}}，页大小：{{this.SizePage}}-->
+        </div>
+    </template>
+</div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                input: '',
+                loginCheck: false,
+                dialogVisible3: false,
+                allPage: 40,
+                currentPage: 1,
+                SizePage: 8,
+                dialogFormVisible2: false,
+                pageVO: {
+                    allPage: 40,
+                    currentPage: 1,
+                    sizePage: 8,
+                },
+                formAdd: {
+                    vehicleLicense: '',
+                    vehicleName: '',
+                    vehicleRent: '',
+                    vehicleState: false
+                },
+                form: {
+                    id: '2',
+                    vehicleLicense: 'A9011',
+                    vehicleName: '莫玛',
+                    vehicleRent: 2013.2,
+                    vehicleState: true
+                }, rules: {
+                    vehicleLicense: [
+                        {required: true, message: '请输入车牌号', trigger: 'blur'},
+                    ],
+                    vehicleName: [
+                        {required: true, message: '请输入车辆名', trigger: 'blur'},
+                    ],
+                    vehicleRent: [
+                        {required: true, message: '请输入车辆租金', trigger: 'blur'},
+
+                    ]
+                },
+                formLabelWidth: '120px',
+                dialogTableVisible: false,
+                dialogFormVisible: false,
+                tableData: [],
+                vehicle: {
+                    id: '',
+                    vehicleLicense: '',
+                    vehicleName: '',
+                    vehicleRent: '',
+                    vehicleState: ''
+                }
+            }
+        },
+        watch: {
+            currentPage(newPage, oldPag) {
+                if (!this.loginCheck) {
+                    this.messageResx("没登录就想翻页？太行了！");
+                    return;
+                }
+                // alert(oldPag+'=>>>'+newPage)
+                this.pageVO.currentPage = newPage;
+                axios.post('/vehicle/page', this.pageVO)
+                    .then(res => {
+                        if (res.data.code === 1) {
+                            // 更新tableData等数据
+                            this.tableData = res.data.data.vehicleList;
+                            this.allPage = res.data.data.totalCount;
+                        } else {
+                            // 处理请求失败的情况
+                            this.failForm("请求数据失败");
+                        }
+                    })
+                    .catch(error => {
+                        // 处理请求出错的情况
+                        console.error(error);
+                        this.failForm("请求出错");
+                    });
+            },
+            SizePage(newSize, oldSize) {
+                if (!this.loginCheck) {
+                    this.messageResx("没登录就想翻页？太行了！");
+                    return;
+                }
+                // 处理每页条数变化，发起异步请求
+                this.pageVO.sizePage = newSize;
+                axios.post('/vehicle/page', this.pageVO)
+                    .then(res => {
+                        if (res.data.code === 1) {
+                            // 更新tableData等数据
+                            this.tableData = res.data.data.vehicleList;
+                            this.allPage = res.data.data.totalCount;
+                        } else {
+                            // 处理请求失败的情况
+                            this.failForm("请求数据失败");
+                        }
+                    })
+                    .catch(error => {
+                        // 处理请求出错的情况
+                        console.error(error);
+                        this.failForm("请求出错");
+                    });
+            },
+        },
+        created() {
+            this.messageRes("系统正在初始化");
+            // sessionStorage.setItem('admin2', 'yourValue');
+            const adminLoginCheck = localStorage.getItem('admin');
+            // alert(adminLoginCheck)
+            // alert(adminLoginCheck == null)
+            if (adminLoginCheck == null) {
+                // alert("没登陆啊");
+
+                this.failForm("好小子，不登陆是吧！")
+                this.messageResx("注意，不要用奇奇怪怪的访问方式！")
+                return false;
+            } else {
+                this.loginCheck = true;
+                // alert("OK")
+            }
+            axios.post('/vehicle/page', this.pageVO)
+                .then(res => {
+                    if (res.data.code === 1) {
+                        // alert(JSON.stringify(res.data));
+                        this.tableData = res.data.data.vehicleList;
+                        this.allPage = res.data.data.totalCount;
+                    }
+                    this.trueForm("初始化完成！")
+                }).catch(error => {
+                // 处理请求出错的情况
+                console.error(error);
+                this.failForm("初始化失败！");
+            }).finally(() => {
+
+            });
+
+        },
+        methods: {
+            search() {
+                let decodeURIComp = decodeURIComponent(this.input);
+                if (decodeURIComp == null || decodeURIComp === '') {
+                    axios.post('/vehicle/page', this.pageVO)
+                        .then(res => {
+                            if (res.data.code === 1) {
+                                // alert(JSON.stringify(res.data));
+                                this.tableData = res.data.data.vehicleList;
+                                this.allPage = res.data.data.totalCount;
+                            }
+                            this.trueForm("初始化完成！")
+                        }).catch(error => {
+                        // 处理请求出错的情况
+                        console.error(error);
+                        this.failForm("初始化失败！");
+                    }).finally(() => {
+
+                    });
+                    return;
+                }
+                axios.post('/vehicle/fuzzyQuery', decodeURIComp)
+                    .then(res => {
+                        this.tableData = res.data.data;
+                    }).catch(error => {
+                    // 处理请求出错的情况
+                    console.error(error);
+                    this.failForm("服务器出错啦！");
+                })
+            },
+            deleteV(item) {
+                this.dialogVisible3 = true;
+                this.form = JSON.parse(JSON.stringify(item)); // 使用深度克隆
+            },
+            okDelete() {
+                const id = this.form.id; // 获取 this.form.id 的值
+                axios.delete('/vehicle/delete/' + id)
+                    .then(res => {
+                        if (res.data.code === 1) {
+                            // alert(JSON.stringify(res.data));
+                            this.trueForm("成功删除！")
+                        } else {
+                            this.failForm(res.data.msg);
+                        }
+                        window.location.reload();
+                    }).catch(error => {
+                    // 处理请求出错的情况
+                    console.error(error);
+                    this.failForm("服务器出错啦！");
+                })
+                this.dialogVisible3 = false
+            },
+            openFromAdd() {
+                this.dialogFormVisible2 = true;
+            },
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+                this.SizePage = val;
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+                this.currentPage = val;
+            },
+            filterTag(value, row) {
+                return row.vehicleState === value;
+            },
+            openFrom(item) {
+                this.dialogFormVisible = true;
+                this.form = JSON.parse(JSON.stringify(item)); // 使用深度克隆
+            },
+            subVAdd(formName) {
+                if (!this.loginCheck) {
+                    this.messageResx("没登录就想添加？太行了！");
+                    return;
+                }
+                this.$refs[formName].validate((valid) => {
+
+                    if (valid) {
+                        axios.put('/vehicle/add', this.formAdd)
+                            .then(res => {
+                                if (res.data.code === 1) {
+                                    this.trueForm("提交成功");
+                                    this.dialogFormVisible = false;
+                                    window.location.reload();
+                                } else {
+                                    // 处理请求失败的情况
+                                    this.failForm(res.data.msg);
+                                }
+                            })
+                            .catch(error => {
+                                // 处理请求出错的情况
+                                console.error(error);
+                                this.failForm("请求出错(一般是你钱输错了...)");
+                                this.dialogFormVisible = false;
+                            });
+                    } else {
+                        this.failForm("请确保表单完整")
+                        return false;
+                    }
+                });
+            },
+            subV(formName) {
+                try {
+                    this.$refs[formName].validate((valid) => {
+                        if (valid) {
+                            // alert(this.form.id+this.form.vehicleLicense+this.form.vehicleName+this.form.vehicleRent+this.form.vehicleState)
+                            //
+
+                            axios.post('/vehicle/update', this.form)
+                                .then(res => {
+                                    if (res.data.code === 1) {
+                                        this.trueForm("提交成功");
+                                        this.dialogFormVisible = false;
+                                        window.location.reload();
+                                    } else {
+                                        // 处理请求失败的情况
+                                        this.failForm(res.data.msg);
+                                    }
+                                })
+                                .catch(error => {
+                                    // 处理请求出错的情况
+                                    console.error(error);
+                                    this.failForm("请求出错(一般是你钱输错了...)");
+                                    this.dialogFormVisible = false;
+                                });
+
+
+                            // this.trueForm("提交成功");
+                            // this.dialogFormVisible = false;
+
+                        } else {
+                            this.failForm("请确保表单完整");
+                        }
+                    });
+                } catch (error) {
+                    // 处理异常
+                    this.failForm("提交异常请刷新后再重新编辑");
+                    // alert(this.form.id)
+                    console.error("发生了一个错误:", error);
+                }
+
+
+            },
+            messageRes(msg) {
+                this.$notify({
+                    title: '稍等',
+                    message: msg,
+                    position: 'bottom-left',
+                    offset: 100
+                });
+            },
+            messageResx(tie, msg) {
+                this.$notify({
+                    title: tie,
+                    message: msg,
+                    position: 'bottom-left',
+                    offset: 100
+                });
+            },
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex === 0) {
+                    return 'warning-row';
+                } else if (rowIndex === 3) {
+                    return 'success-row';
+                }
+                return '';
+            },
+            failForm(msg) {
+                this.$message({
+                    showClose: true,
+                    message: msg,
+                    type: 'error'
+                });
+            },
+            trueForm(msg) {
+                this.$message({
+                    showClose: true,
+                    message: msg,
+                    type: 'success'
+                });
+            },
+        }
+
+    })
+</script>
+</html>

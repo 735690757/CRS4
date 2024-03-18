@@ -1,0 +1,185 @@
+<!--注册-->
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/register.css">
+
+    <title>注册</title>
+</head>
+<link rel="stylesheet" href="element-ui/index.css">
+<script src="./js/vue.js"></script>
+<script src="./element-ui/index.js"></script>
+<script src="./js/axios-0.18.0.js"></script>
+<body>
+
+<div class="core" id="app">
+    <p class="ti">注册</p>
+    <form name="f2" id="f2" class="Rfor">
+        <p class="zh">
+            <label>
+                账号:&nbsp;&nbsp;
+                <input type="text" v-model="reTable.username" id="username" name="username" placeholder="请输入您的账号"
+                       class="zhin">
+            </label>
+        </p>
+        <p class="zh">
+            <label>
+                昵称:&nbsp;&nbsp;
+                <input type="text" v-model="reTable.nickname" id="nickname" name="nickname"
+                       placeholder="给自己起一个昵称吧" class="zhin">
+            </label>
+        </p>
+        <p class="zh2">
+            <label>
+                邮箱:&nbsp;&nbsp;
+                <input type="text" v-model="reTable.email" id="email" name="email" placeholder="请输入您的邮箱"
+                       class="zhin2">
+            </label>
+            <input :disabled="isDisabled" @click="sendEmail" type="button" id="yzm" value="发送" class="dl2">
+            <input type="text" v-model="eCode" id="eCode" name="eCode" placeholder="验证码" class="zhin3">
+
+        </p>
+        <p class="zh">
+            <label>
+                密码:&nbsp;&nbsp;
+                <input type="password" v-model="reTable.password" id="password" name="password"
+                       placeholder="请输设置您的密码" class="zhin">
+            </label>
+        </p>
+        <p class="zh" id="passagin">
+            <label>
+                确认密码:&nbsp;&nbsp;
+                <input type="password" v-model="rePassword" id="rePassword" placeholder="请再一次确认您的密码"
+                       class="zhin">
+            </label>
+        </p>
+        <input @click="submitForm" type="button" value="注册" class="dl">
+    </form>
+    <p class="bel">已经有账号了？ <a href="./index.html" class="zc">点击这里！</a></p>
+</div>
+<script type="text/javascript" src="./js/passChange_LR.js"></script>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                isDisabled: false,
+                eCode: '',
+                reTable: {
+                    username: '',
+                    nickname: '',
+                    email: '',
+                    phone: '',
+                    password: ''
+                },
+                rePassword: '',
+            }
+        },
+        methods: {
+            startCountdown() {
+                this.isDisabled = true; // 禁用输入字段
+
+                const countdownInterval = setInterval(() => {
+                    if (this.countdown > 0) {
+                        this.countdown--;
+                    } else {
+                        clearInterval(countdownInterval);
+                        this.isDisabled = false;
+                    }
+                }, 10000);
+            },
+            sendEmail() {
+                this.startCountdown();
+                this.messageRes2();
+                if (this.reTable.email === '' || this.reTable.email == null) {
+                    this.messageFailL("邮箱未填写")
+                } else {
+                    axios.post('/email/checkCode', this.reTable.email)
+                        .then(res => {
+                            if (res.data && res.data.code === 1) {
+                                this.messageSuccess("发送成功")
+
+                            } else {
+                                this.messageFail(res.data.msg)
+                            }
+
+                        })
+                }
+            },
+            submitForm() {
+                this.messageRes();
+                if (this.reTable.username == null
+                    || this.reTable.username === ''
+                    || this.reTable.password == null
+                    || this.reTable.password === ''
+                    || this.reTable.nickname == null
+                    || this.reTable.nickname === '') {
+                    this.messageFailL("请确保表单完整");
+                    // alert("请确保表单完整")
+                    return
+                }
+                if (this.reTable.password !== this.rePassword) {
+                    this.messageFailL("两次密码不一致");
+                    return;
+                }
+                if (this.eCode == null || this.eCode === '') {
+                    this.messageFailL("未填写邮箱验证码");
+                    return;
+                }
+                axios.post('/admin/register/' + this.eCode, this.reTable)
+                    .then(res => {
+                        if (res.data && res.data.code === 1) {
+                            //success
+                            this.messageSuccess(res.data.data);
+                            window.location.href = '/CRS/index.html';
+
+                        } else {
+                            this.messageFail(res.data.msg)
+                        }
+
+                    })
+            },
+            messageRes2() {
+                this.$notify({
+                    title: '稍等',
+                    message: '正在发送',
+                    position: 'top-left'
+                });
+            },
+            messageRes() {
+                this.$notify({
+                    title: '稍等',
+                    message: '系统正在注册',
+                    position: 'top-left'
+                });
+            },
+            messageFailL(msg) {
+                this.$notify({
+                    title: '失败',
+                    message: msg,
+                    position: 'top-right'
+                });
+            },
+            messageFail(msg) {
+                this.$notify({
+                    title: '失败',
+                    message: msg,
+                    position: 'top-right'
+                });
+            },
+            messageSuccess(msg) {
+                this.$notify({
+                    title: '成功',
+                    message: msg,
+                    position: 'top-right'
+                });
+            },
+        }
+
+    })
+</script>
+</html>

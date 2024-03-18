@@ -1,0 +1,185 @@
+*{
+    margin: 0 auto;
+}
+body{
+    /*background-image: linear-gradient(to right,*/
+    /*rgb(116, 255, 213) 0,*/
+    /*rgb(49, 167, 221) 50%,*/
+    /*rgb(164, 166, 255) 100%);*/
+    /*background-size: 100%;*/
+    /*background-repeat: no-repeat;*/
+}
+.core{
+    width: 560px;
+    height: 600px;
+    margin-top: 85px;
+    background-color: rgb(255, 255, 255,0.55);
+    border-radius: 20px;
+    transition: all 0.7s;
+    backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(201, 201, 201, 0.8);
+    border-left: 1px solid rgba(201, 201, 201, 0.8);
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.7s;
+}
+.core:hover{
+    transition: all 0.7s;
+    box-shadow: 
+    0px 0px 0px rgb(233,233,233),
+    0px 0px 15px rgb(250, 255, 247),
+    0px 0px 15px rgb(255, 255, 255),
+    0px 0px 0px rgb(233,233,233);
+    
+}
+.ti{
+    text-align: center;
+    font-size: 30px;
+    font-weight: 150;
+    font-weight: bold;
+    float: left;
+    margin-left: 260px;
+    margin-top: 10px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: rgb(110, 110, 110);
+}
+.Rfor{
+    width: 450px;
+    height: 300px;
+
+}
+.zh{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-align: center;
+    font-size: 20px;
+    float: left;
+    margin-left: 20px;
+    margin-top: -20px;
+}
+.zh2{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-align: center;
+    font-size: 20px;
+    float: left;
+    margin-left: 20px;
+    margin-top: -20px;
+}
+.zhin{
+    width: 320px;
+    height: 45px;
+    margin-top: 60px;
+    border-radius: 10px;
+    text-align: center;
+    border: none;
+    outline: none;
+    transition: all 0.7s;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+}
+.zhin2{
+    /*margin-left: -10px;*/
+    width: 160px;
+    height: 45px;
+    margin-top: 60px;
+    border-radius: 10px;
+    text-align: center;
+    border: none;
+    outline: none;
+    transition: all 0.7s;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+}
+.zhin3{
+    /*margin-left: -10px;*/
+    width: 60px;
+    height: 45px;
+    margin-top: 60px;
+    border-radius: 10px;
+    text-align: center;
+    border: none;
+    outline: none;
+    transition: all 0.7s;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+}
+.zhin:hover{
+    transition: all 0.7s;
+    box-shadow: 
+    0px 0px 0px rgb(233,233,233),
+    0px 0px 15px rgb(255, 255, 233),
+    0px 0px 15px rgb(251, 255, 219),
+    0px 0px 0px rgb(233,233,233);
+}
+.zhin2:hover{
+    transition: all 0.7s;
+    box-shadow:
+            0px 0px 0px rgb(233,233,233),
+            0px 0px 15px rgb(255, 255, 233),
+            0px 0px 15px rgb(251, 255, 219),
+            0px 0px 0px rgb(233,233,233);
+}
+.zhin3:hover{
+    transition: all 0.7s;
+    box-shadow:
+            0px 0px 0px rgb(233,233,233),
+            0px 0px 15px rgb(255, 255, 233),
+            0px 0px 15px rgb(251, 255, 219),
+            0px 0px 0px rgb(233,233,233);
+}
+.open{
+    cursor: pointer;
+    font-size: 10px;
+}
+.dl{
+    float: left;
+    width: 140px;
+    height: 50px;
+    background-color: rgb(161, 126, 214);
+    border-radius: 10px;
+    border: 0px;
+    cursor: pointer;
+    margin-top: 30px;
+    margin-left: 170px;
+    transition: all 0.7s;
+}
+.dl2{
+    float: right;
+    width: 80px;
+    height: 50px;
+    background-color: rgb(161, 126, 214);
+    border-radius: 10px;
+    border: 0px;
+    cursor: pointer;
+    margin-top: 60px;
+    margin-left: 10px;
+    transition: all 0.7s;
+}
+.dl:hover{
+    transition: all 0.7s;
+    box-shadow: 
+    0px 0px 0px rgb(233,233,233),
+    0px 0px 15px rgb(140, 152, 233),
+    0px 0px 15px rgb(127, 132, 216),
+    0px 0px 0px rgb(233,233,233);
+}
+.dl2:hover{
+    transition: all 0.7s;
+    box-shadow:
+            0px 0px 0px rgb(233,233,233),
+            0px 0px 15px rgb(140, 152, 233),
+            0px 0px 15px rgb(127, 132, 216),
+            0px 0px 0px rgb(233,233,233);
+}
+.bel {
+	margin-top: 270px;
+	margin-left: 350px;
+}
+.zc{
+    font-style: italic;
+    text-decoration: none;
+}
+input::-webkit-input-placeholder { /* WebKit browsers */ 
+    color:rgb(33, 95, 130);
+}
+input::-moz-placeholder { /* Mozilla Firefox 19+ */ 
+    color:rgb(33, 95, 130);
+}
+#passagin{
+    margin-left: -20px;
+}

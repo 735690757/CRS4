@@ -1,0 +1,126 @@
+<!--员工管理-->
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>车辆排行榜</title>
+    <link rel="stylesheet" href="element-ui/index.css">
+    <script src="./js/vue.js"></script>
+    <script src="./element-ui/index.js"></script>
+    <script src="./js/axios-0.18.0.js"></script>
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .el-table .even-row0 {
+        background-color: #ffedd6;
+    }
+
+    .el-table .even-row10 {
+        background-color: #409EFF;
+    }
+
+    .el-table .even-row9 {
+        background-color: rgb(82, 167, 253);
+    }
+
+    .el-table .even-row8 {
+        background-color: rgb(101, 176, 253);
+    }
+
+    .el-table .even-row7 {
+        background-color: rgb(120, 186, 253);
+    }
+
+    .el-table .even-row6 {
+        background-color: rgb(159, 205, 253);
+    }
+
+    .el-table .even-row5 {
+        background-color: rgb(178, 214, 253);
+    }
+
+    .el-table .even-row4 {
+        background-color: rgb(178, 214, 253);
+    }
+
+    .el-table .even-row3 {
+        background-color: rgb(196, 224, 253);
+    }
+
+    .el-table .even-row2 {
+        background-color: rgb(215, 234, 253);
+    }
+
+    .el-table .even-row1 {
+        background-color: rgb(234, 243, 253);
+    }
+
+</style>
+<body>
+<div id="app">
+    <el-row>
+        <el-col :span="24">
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item>车辆排行榜</el-breadcrumb-item>
+            </el-breadcrumb>
+
+        </el-col>
+    </el-row>
+    <el-table
+            :data="tableData"
+            style="width: 100%;"
+            :row-class-name="tableRowClassName">
+        <el-table-column align="center" label="汽车热度排行榜">
+            <el-table-column
+                    type="index"
+                    label="排名"
+                    align="center"
+                    width="50">
+            </el-table-column>
+            <el-table-column
+                    prop="name"
+                    align="center"
+                    label="车辆名">
+            </el-table-column>
+            <el-table-column
+                    prop="score"
+                    align="center"
+                    label="热度值">
+            </el-table-column>
+        </el-table-column>
+    </el-table>
+</div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                tableData: []
+            }
+        },
+        created() {
+            axios.get('/vehicle/rank')
+                .then(res => {
+                    if (res.data.code === 1) {
+                        this.tableData = res.data.data;
+                    }
+                })
+        },
+        methods: {
+            tableRowClassName({row, rowIndex}) {
+                return 'even-row' + rowIndex;
+            }
+        }
+
+    })
+</script>
+</html>

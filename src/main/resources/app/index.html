@@ -1,0 +1,143 @@
+<!--登录引导-->
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/login4.css">
+
+    <!--    &lt;!&ndash; import CSS &ndash;&gt;-->
+    <!--    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+    <!--    <link rel="stylesheet" href="./css/mainPage.css">-->
+
+    <title>登录</title>
+</head>
+<link rel="stylesheet" href="element-ui/index.css">
+<script src="./js/vue.js"></script>
+<script src="./element-ui/index.js"></script>
+<script src="./js/axios-0.18.0.js"></script>
+<link rel="shortcut icon" href="/rui.ico"/>
+
+<body class="body">
+<div id="app" v-loading.fullscreen.lock="fullscreenLoading">
+    <div class="for_img">
+
+        <iframe id="cIframe"
+                class="c_iframe"
+                name="cIframe"
+                :src="iframeUrl"
+                width="100%"
+                height="100%"
+                frameborder="0"
+        ></iframe>
+
+    </div>
+    <div class="for_head">
+        <div class="headm">
+            <span><b>欢迎使用汽车租赁系统 4</b></span>
+        </div>
+        <!--        <span class="tzzc">没有账号？<a href="register.html">点我注册！</a></span>-->
+    </div>
+
+    <div class="for_form">
+        <form name="f1" id="f1">
+            <p class="lo">Login</p>
+            <p class="text">
+                <label class="label1">
+                    <b>Username:</b>&nbsp;&nbsp;
+                    <input type="text" v-model="admin.username" id="username" name="username"
+                           placeholder="请输入您的账号" class="zhin">
+                </label>
+            </p>
+            <p class="text">
+                <label class="mima">
+                    <b>Password:</b>&nbsp;&nbsp;
+                    <input type="password" v-model="admin.password" id="password" name="password"
+                           placeholder="请输入您的密码" class="zhin">
+                </label>
+            </p>
+            <input type="submit" v-on:click.prevent="login()" value="登录" class="dl">
+            <a href="register.html" class="zczc">
+                没有账号？点我注册！
+            </a>
+        </form>
+
+    </div>
+    <div class="for_foot">
+        <!--        <input type="button"  value="注册" class="dl dl2">-->
+        <div class="footl">
+            Designed by @Karry.Liu, all rights reserved
+        </div>
+    </div>
+</div>
+</body>
+<!--&lt;!&ndash; import Vue before Element &ndash;&gt;-->
+<!--<script src="https://unpkg.com/vue@2/dist/vue.js"></script>-->
+<!--&lt;!&ndash; import JavaScript &ndash;&gt;-->
+<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                iframeUrl: "./stars.html",
+                admin: {
+                    username: '',
+                    password: '',
+                },
+                fullscreenLoading: false
+            }
+        },
+        methods: {
+            login() {
+                this.openFullScreen1();
+                axios.post('/admin/login', this.admin)
+                    .then(res => {
+
+                        if (res.data && res.data.code === 1) {
+                            // alert(JSON.stringify(res.data.data))
+                            let adminData = res.data.data;
+                            adminData.password = '';
+                            let modifiedAdminData = Object.assign({}, adminData);
+                            localStorage.setItem('admin', JSON.stringify(modifiedAdminData));
+                            let map = res.data.map;
+                            // console.log(JSON.stringify(map))
+                            localStorage.setItem('token', JSON.stringify(map));
+
+                            // alert(22)
+                            window.location.href = '/CRS/mainPage.html';
+                        } else {
+                            // 使用 Vue.js 的消息提示来显示错误消息
+                            // this.$message.error(res.msg);
+                            // alert(res.data.msg)
+                            this.open4(res.data.msg);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+            ,
+            open4(msg) {
+                // alert("失败哦")
+                this.$notify.error({
+                    title: '登陆失败',
+                    message: msg,
+                    position: 'top-left'
+                });
+            },
+            openFullScreen1() {
+                // alert(111)
+                this.fullscreenLoading = true;
+                setTimeout(() => {
+                    this.fullscreenLoading = false;
+                }, 1000);
+            },
+        }
+
+    })
+</script>
+</html>
+
